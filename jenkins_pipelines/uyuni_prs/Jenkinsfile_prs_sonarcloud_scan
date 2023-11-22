@@ -35,23 +35,17 @@ pipeline {
     agent { label 'uyuni-uyunidocker' }
 
     stages {
-        stage('Clean Up Workspace') {
-            steps {
-                echo 'Check out SCM'
-                checkout scm
-            }
-        }
         stage('Checkout PR code') {
             steps {
                 echo 'Check out PR code'
                 checkout([
                     $class: 'GitSCM',
-                    branches: [[name: "${env.PR_BRANCH}"]],
+                    branches: [[name: "pull/${params.PR_NUMBER}/head"]],
                     extensions: [[
                         $class: 'CloneOption',
                         depth: 1
                     ]],
-                    userRemoteConfigs: [[url: "${env.REPO_URL}"]]
+                    userRemoteConfigs: [[url: "https://github.com/uyuni-project/uyuni"]]
                 ])
             }
         }
